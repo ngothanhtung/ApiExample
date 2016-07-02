@@ -36,7 +36,7 @@
             var url = $form.attr("action");
 
             // Send the data using post
-            var posting = $.post("api/Categories",
+            var posting = $.post(url,
             {
                 Name: $form.find("input[name='Name']").val(),
                 ParentId: $form.find("input[name='ParentId']").val(),

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product App</title>
+    <link href="Content/bootstrap.css" rel="stylesheet" type="text/css" />
+</head>
+<body ng-app="myApp" ng-controller="myController">
+    <div class="container">
+        <form class="form-horizontal" id="productForm" action="api/Categories" method="post">
+            <div class="form-group">
+                <input name="Name" ng-model="Name" class="form-control" placeholder="Name" />
+            </div>
+            <div class="form-group">
+                <input name="ParentId" ng-model="ParentId" class="form-control" placeholder="ParentId" value="0" />
+            </div>
+            <div class="form-group">
+                <input name="SortOrder" ng-model="SortOrder" class="form-control" placeholder="SortOrder" value="0" />
+            </div>
+            <div class="form-group">
+                <input name="Status" ng-model="Status" class="form-control" placeholder="Status" value="ACTIVE" />
+            </div>
+            <button class="btn btn-primary" type="button" ng-click="post();">Submit</button>
+        </form>
+    </div>
+    <script src="Scripts/jquery-3.0.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script>
+
+        var app = angular.module("myApp", []);
+        app.controller("myController", function ($scope, $http) {
+
+            $scope.post = function () {
+                var data = {
+                    Name: $scope.Name,
+                    ParentId: $scope.ParentId,
+                    SortOrder: $scope.SortOrder,
+                    Status: $scope.Status
+                }
+                $http.post('api/Categories', data)
+               .then(function (response) {
+                   console.log(response.data);
+               });
+            };
+        });
+    </script>
+</body>
+</html>

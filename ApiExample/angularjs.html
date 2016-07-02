@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product App</title>
+    <link href="Content/bootstrap.css" rel="stylesheet" type="text/css" />
+</head>
+<body ng-app="myApp" ng-controller="myController">
+    <div class="container">
+        <div>
+            <h2>All Products</h2>
+            
+            <table class="table table-condensed table-hover">
+                <tr ng-repeat="p in products">
+                    <td>
+                        {{ p.Id }}
+                    </td>
+                    <td>
+                        {{ p.Name }}
+                    </td>
+                    <td>
+                        {{ p.Price | currency }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="form-inline">
+            <div class="form-group">
+                <input type="text" id="productId" ng-model="productId" class="form-control" />
+            </div>
+            <input type="button" value="Search" class="btn btn-primary" ng-click="find();" />
+        </div>
+        <h3>
+            {{ product.Id + " - " + product.Name }} 
+        </h3>
+    </div>
+    <script src="Scripts/jquery-3.0.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script>
+        var uri = 'api/products';
+
+        var app = angular.module("myApp", []);
+        app.controller("myController", function($scope, $http) {
+            // JSON
+            $http.get(uri)
+                .then(function (response) {
+                    $scope.products = response.data;
+                });
+
+            // find method
+            $scope.find = function() {
+                $http.get(uri + '/' + $scope.productId)
+               .then(function (response) {
+                   $scope.product = response.data;
+               });
+            }
+        });
+    </script>
+</body>
+</html>

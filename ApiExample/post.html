@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product App</title>
+    <link href="Content/bootstrap.css" rel="stylesheet" type="text/css" />
+</head>
+<body ng-app="myApp" ng-controller="myController">
+    <div class="container">
+        <form class="form-horizontal" id="productForm" action="api/Categories" method="post">
+            <div class="form-group">
+                <input name="Name" class="form-control" placeholder="Name" />
+            </div>
+            <div class="form-group">
+                <input name="ParentId" class="form-control" placeholder="ParentId" value="0" />
+            </div>
+            <div class="form-group">
+                <input name="SortOrder" class="form-control" placeholder="SortOrder" value="0" />
+            </div>
+            <div class="form-group">
+                <input name="Status" class="form-control" placeholder="Status" value="ACTIVE" />
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="Scripts/jquery-3.0.0.js"></script>
+
+    <script>
+        // Attach a submit handler to the form
+        $("#productForm").submit(function (event) {
+
+            // Stop form from submitting normally
+            event.preventDefault();
+
+            // Get some values from elements on the page:
+            var $form = $(this);
+            var url = $form.attr("action");
+
+            // Send the data using post
+            var posting = $.post("api/Categories",
+            {
+                Name: $form.find("input[name='Name']").val(),
+                ParentId: $form.find("input[name='ParentId']").val(),
+                SortOrder: $form.find("input[name='SortOrder']").val(),
+                Status: $form.find("input[name='Status']").val()
+            });
+
+            // Put the results in a div
+            posting.done(function (data) {
+                console.log(data);
+            });
+        });
+    </script>
+</body>
+</html>

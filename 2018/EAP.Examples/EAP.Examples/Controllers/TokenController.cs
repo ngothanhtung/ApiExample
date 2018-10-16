@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace EAP.Examples.Controllers
 {
@@ -35,7 +36,7 @@ namespace EAP.Examples.Controllers
 		}
 
 
-		public static ClaimsPrincipal GetPrincipal(string token)
+		public static ClaimsPrincipal ValidateToken(string token)
 		{
 			try
 			{
@@ -54,34 +55,13 @@ namespace EAP.Examples.Controllers
 				};
 
 				SecurityToken securityToken;
-				ClaimsPrincipal principal = tokenHandler.ValidateToken(token, parameters, out securityToken);
-				return principal;
+				return tokenHandler.ValidateToken(token, parameters, out securityToken);				
 			}
 			catch (Exception e)
 			{
 				return null;
 			}
-		}
-
-		public static string ValidateToken(string token)
-		{
-			string username = null;
-			ClaimsPrincipal principal = GetPrincipal(token);
-			if (principal == null)
-				return null;
-			ClaimsIdentity identity = null;
-			try
-			{
-				identity = (ClaimsIdentity)principal.Identity;
-			}
-			catch (NullReferenceException)
-			{
-				return null;
-			}
-			Claim usernameClaim = identity.FindFirst(ClaimTypes.Name);
-			username = usernameClaim.Value;
-			return username;
-		}
+		}	
 
 		[HttpPost]
 		public HttpResponseMessage Login(User user)
@@ -108,15 +88,16 @@ namespace EAP.Examples.Controllers
 			return Request.CreateResponse(HttpStatusCode.OK);
 		}
 		[HttpGet]
-		public HttpResponseMessage Validate(string token, string username)
+		public HttpResponseMessage Validate()
 		{
-			bool exists = username == "admin";
-			if (!exists) return Request.CreateResponse(HttpStatusCode.NotFound, "The user was not found.");
+			var token = Request.Headers.Authorization.Parameter;
+			var result = ValidateToken(token);
+			if (result == null)
+			{
+				return Request.CreateResponse(HttpStatusCode.Unauthorized);
+			}
 
-			string tokenUsername = ValidateToken(token);
-			if (username.Equals(tokenUsername)) return Request.CreateResponse(HttpStatusCode.OK);
-
-			return Request.CreateResponse(HttpStatusCode.Unauthorized);
+			return Request.CreateResponse(HttpStatusCode.OK);
 		}
 	}
 }

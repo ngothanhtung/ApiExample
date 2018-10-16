@@ -15,18 +15,18 @@ namespace EAP.Examples
 			config.MapHttpAttributeRoutes();
 
 			// Convention-based routing.
-			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional }
-			);
-
-			// Routing by Action Name
 			//config.Routes.MapHttpRoute(
 			//	name: "DefaultApi",
-			//	routeTemplate: "api/{controller}/{action}/{id}",
+			//	routeTemplate: "api/{controller}/{id}",
 			//	defaults: new { id = RouteParameter.Optional }
 			//);
+
+			// Routing by Action Name
+			config.Routes.MapHttpRoute(
+				name: "DefaultApi",
+				routeTemplate: "api/{controller}/{action}/{id}",
+				defaults: new { id = RouteParameter.Optional }
+			);
 		}
 	}
 }

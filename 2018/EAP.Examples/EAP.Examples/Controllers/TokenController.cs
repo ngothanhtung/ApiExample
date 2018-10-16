@@ -102,7 +102,11 @@ namespace EAP.Examples.Controllers
 			return Request.CreateResponse(HttpStatusCode.OK, GenerateToken(user.Username));
 		}
 
-
+		[HttpGet]
+		public HttpResponseMessage NoToken()
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
 		[HttpGet]
 		public HttpResponseMessage Validate(string token, string username)
 		{
@@ -112,7 +116,7 @@ namespace EAP.Examples.Controllers
 			string tokenUsername = ValidateToken(token);
 			if (username.Equals(tokenUsername)) return Request.CreateResponse(HttpStatusCode.OK);
 
-			return Request.CreateResponse(HttpStatusCode.BadRequest);
+			return Request.CreateResponse(HttpStatusCode.Unauthorized);
 		}
 	}
 }

@@ -29,6 +29,19 @@ namespace EAP.Core.Examples
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("WebPolicy", builder =>
+            {
+                var sites = new[]
+                {
+                    "http://localhost:5100"
+                };
+
+                builder
+                    .WithOrigins(sites)
+                    //.AllowAnyOrigin()                    
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
             // JWT
             services
@@ -62,10 +75,6 @@ namespace EAP.Core.Examples
             }
 
             app.UseHttpsRedirection();
-
-            //app.UseCookiePolicy();
-            //app.UseAuthentication();
-
             app.UseMvc();
         }
     }

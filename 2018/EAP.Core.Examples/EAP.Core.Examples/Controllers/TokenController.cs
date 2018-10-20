@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -70,6 +71,19 @@ namespace EAP.Core.Examples.Controllers
             {
                 ok = true,
                 description = "Get Products",
+            };
+
+            return new OkObjectResult(response);
+        }
+
+        [HttpGet("customers")]
+        [EnableCors("WebPolicy")]
+        public IActionResult GetCustomers()
+        {
+            var response = new
+            {
+                ok = true,
+                description = "Get Customers",
             };
 
             return new OkObjectResult(response);
